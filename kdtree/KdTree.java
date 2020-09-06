@@ -5,8 +5,8 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
     private Node root;
-    private Queue<Node> forDraw;
-    private Queue<Point2D> insideRect = new Queue<>();
+    private final Queue<Node> forDraw;
+    private final Queue<Point2D> insideRect = new Queue<>();
     private Point2D champion;
 
     private static class Node {
@@ -49,7 +49,7 @@ public class KdTree {
     public void insert(Point2D p)              // add the point to the set (if it is not already in the set)
     {
         if (p == null) throw new IllegalArgumentException();
-        root = insert(root, p);
+        if (!contains(p)) root = insert(root, p);
 
 
     }
@@ -213,22 +213,30 @@ public class KdTree {
             champion = root.p;
         }
 
-        double recDistX = x.rect.xmin();
-        double recDistY = p.y();
-        if (p.distanceTo(champion) > p.distanceTo(new Point2D(recDistX, recDistY))) {
-            if (x.lb != null) {
-                if (p.distanceTo(x.lb.p) < p.distanceTo(champion)) {
+
+        if (x.lb != null) {
+            double recDistX = x.lb.rect.xmax();
+            double recDistY = p.y();
+            if (p.distanceSquaredTo(champion) > p.distanceSquaredTo(new Point2D(recDistX, recDistY))) {
+                if (p.distanceSquaredTo(x.lb.p) < p.distanceSquaredTo(champion)) {
                     champion = x.lb.p;
                     nearest(x.lb, p);
                 } else nearest(x.lb, p);
             }
-            if (x.rt != null) {
-                if (p.distanceTo(x.rt.p) < p.distanceTo(champion)) {
+
+        }
+        if (x.rt != null) {
+            double recDistX = x.rt.rect.xmin();
+            double recDistY = p.y();
+            if (p.distanceSquaredTo(champion) > p.distanceSquaredTo(new Point2D(recDistX, recDistY))) {
+                if (p.distanceSquaredTo(x.rt.p) < p.distanceSquaredTo(champion)) {
                     champion = x.rt.p;
                     nearest(x.rt, p);
                 } else nearest(x.rt, p);
             }
+
         }
+
     }
 
     public static void main(String[] args)                  // unit testing of the methods (optional)
@@ -240,20 +248,22 @@ public class KdTree {
         Point2D p3 = new Point2D(0.2, 0.1);
         Point2D p4 = new Point2D(0.4, 0.5);
         Point2D p5 = new Point2D(0.7, 0.7);
+        Point2D p6 = new Point2D(0.7, 0.7);
 
         kd.insert(p1);
         kd.insert(p2);
         kd.insert(p3);
         kd.insert(p4);
         kd.insert(p5);
+        kd.insert(p6);
 
-        kd.draw();
-        RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
-        queryRec.draw();
-        Iterable<Point2D> iter = kd.range(queryRec);
+        //kd.draw();
+        //RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
+        //queryRec.draw();
+        //Iterable<Point2D> iter = kd.range(queryRec);
         //System.out.println(iter);
-        kd.nearest(new Point2D(1, 1));
-
-
+        //System.out.println(kd.nearest(new Point2D(0.2, 0.2)));
+        //System.out.println(kd.root.rt.rt.p);
+        System.out.println(kd.size());
     }
 }

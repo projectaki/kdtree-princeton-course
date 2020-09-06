@@ -1,4 +1,9 @@
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.Stack;
 
 public class PointSET {
     private final SET<Point2D> set;
@@ -56,10 +61,10 @@ public class PointSET {
         if (p == null) throw new IllegalArgumentException();
         if (set.isEmpty()) return null;
         Point2D nearest = set.max();
-        double smallestDis = p.distanceTo(set.max());
+        double smallestDis = p.distanceSquaredTo(set.max());
         for (Point2D setPoint : set) {
-            if (p.distanceTo(setPoint) < smallestDis) nearest = setPoint;
-            smallestDis = p.distanceTo(setPoint);
+            if (p.distanceSquaredTo(setPoint) < smallestDis) nearest = setPoint;
+            smallestDis = p.distanceSquaredTo(setPoint);
         }
         return nearest;
     }
@@ -73,17 +78,20 @@ public class PointSET {
         pS.insert(p);
         pS.insert(p1);
         pS.insert(p2);
+        /*
         for (Point2D po : pS.set) {
             System.out.println(po);
         }
-        pS.draw();
-        RectHV rec = new RectHV(0.2, 0.3, 0.7, 0.7);
-        rec.draw();
 
-        Iterable<Point2D> temp = pS.range(rec);
-        System.out.println(temp);
+         */
+        //pS.draw();
+        //RectHV rec = new RectHV(0.2, 0.3, 0.7, 0.7);
+        //rec.draw();
 
-        System.out.println(pS.nearest(new Point2D(0, 0)));
+        // Iterable<Point2D> temp = pS.range(rec);
+        //System.out.println(temp);
+
+        //System.out.println(pS.nearest(new Point2D(0, 0)));
 
     }
 }
