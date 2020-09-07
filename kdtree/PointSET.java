@@ -7,6 +7,7 @@ import java.util.Stack;
 
 public class PointSET {
     private final SET<Point2D> set;
+    private Point2D champion;
 
     public PointSET()                               // construct an empty set of points
     {
@@ -60,40 +61,31 @@ public class PointSET {
     {
         if (p == null) throw new IllegalArgumentException();
         if (set.isEmpty()) return null;
-        Point2D nearest = set.max();
-        double smallestDis = p.distanceSquaredTo(set.max());
+        champion = set.max();
         for (Point2D setPoint : set) {
-            if (p.distanceSquaredTo(setPoint) < smallestDis) nearest = setPoint;
-            smallestDis = p.distanceSquaredTo(setPoint);
+            if (p.distanceSquaredTo(setPoint) < p.distanceSquaredTo(champion)) champion = setPoint;
         }
-        return nearest;
+        return champion;
     }
 
     public static void main(String[] args)                  // unit testing of the methods (optional)
     {
         /*
-        Point2D p = new Point2D(0.5, 0.5);
-        Point2D p1 = new Point2D(0.1, 0.5);
-        Point2D p2 = new Point2D(0.3, 0.5);
-        PointSET pS = new PointSET();
-        pS.insert(p);
-        pS.insert(p1);
-        pS.insert(p2);
-
-        for (Point2D po : pS.set) {
-            System.out.println(po);
-        }
+        KdTree kd = new KdTree();
+        Point2D p1 = new Point2D(0.875, 0.0);
+        Point2D p2 = new Point2D(1.0, 0.125);
+        Point2D p3 = new Point2D(0.125, 0.5);
+        Point2D p4 = new Point2D(0.5, 1.0);
+        Point2D p5 = new Point2D(0.25, 0.875);
 
 
-        pS.draw();
-        RectHV rec = new RectHV(0.2, 0.3, 0.7, 0.7);
-        rec.draw();
+        kd.insert(p1);
+        kd.insert(p2);
+        kd.insert(p3);
+        kd.insert(p4);
+        kd.insert(p5);
 
-        Iterable<Point2D> temp = pS.range(rec);
-        System.out.println(temp);
-
-        System.out.println(pS.nearest(new Point2D(0, 0)));
-
+        System.out.println(kd.nearest(new Point2D(0.625, 0.75)));
 
          */
     }

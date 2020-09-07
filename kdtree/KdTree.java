@@ -212,14 +212,17 @@ public class KdTree {
     }
 
     private void range(Node x, RectHV rect) {
-        if (rect.contains(x.p)) insideRect.enqueue(x.p);
+        if (x != null) {
+            if (rect.contains(x.p)) insideRect.enqueue(x.p);
+            if (x.lb != null) {
+                if (rect.intersects(x.lb.rect)) range(x.lb, rect);
+            }
+            if (x.rt != null) {
+                if (rect.intersects(x.rt.rect)) range(x.rt, rect);
+            }
+        }
 
-        if (x.lb != null) {
-            if (rect.intersects(x.lb.rect)) range(x.lb, rect);
-        }
-        if (x.rt != null) {
-            if (rect.intersects(x.rt.rect)) range(x.rt, rect);
-        }
+
     }
 
     public Point2D nearest(Point2D p)             // a nearest neighbor in the set to point p; null if the set is empty
@@ -230,31 +233,74 @@ public class KdTree {
     }
 
     private void nearest(Node x, Point2D p) {
-        if (x.depth == 0) {
-            champion = root.p;
-        }
-
-
-        if (x.lb != null) {
-            double recDistX = x.lb.rect.xmax();
-            double recDistY = p.y();
-            if (p.distanceSquaredTo(champion) > p.distanceSquaredTo(new Point2D(recDistX, recDistY))) {
-                if (p.distanceSquaredTo(x.lb.p) < p.distanceSquaredTo(champion)) {
-                    champion = x.lb.p;
-                    nearest(x.lb, p);
-                } else nearest(x.lb, p);
+        if (x != null) {
+            if (x.depth == 0) {
+                champion = root.p;
             }
+            double recDistX;
+            double recDistY;
+            if (p.distanceSquaredTo(x.p) < p.distanceSquaredTo(champion)) {
+                champion = x.p;
+            }
+            if (x.lb != null && x.lb.rect.contains(p)) {
 
-        }
-        if (x.rt != null) {
-            double recDistX = x.rt.rect.xmin();
-            double recDistY = p.y();
-            if (p.distanceSquaredTo(champion) > p.distanceSquaredTo(new Point2D(recDistX, recDistY))) {
-                if (p.distanceSquaredTo(x.rt.p) < p.distanceSquaredTo(champion)) {
-                    champion = x.rt.p;
+                if (x.depth % 2 != 0) {
+                    recDistX = p.x();
+                    recDistY = x.p.y();
+                } else {
+                    recDistX = x.p.x();
+                    recDistY = p.y();
+
+                }
+
+
+                nearest(x.lb, p);
+
+                if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
                     nearest(x.rt, p);
-                } else nearest(x.rt, p);
+                }
+
+            } else if (x.rt != null && x.rt.rect.contains(p)) {
+
+                if (x.depth % 2 != 0) {
+                    recDistX = p.x();
+                    recDistY = x.p.y();
+                } else {
+                    recDistX = x.p.x();
+                    recDistY = p.y();
+                }
+
+                nearest(x.rt, p);
+                if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                    nearest(x.lb, p);
+                }
+
+
+            } else {
+                if (x.depth % 2 != 0) {
+                    recDistX = p.x();
+                    recDistY = x.p.y();
+                } else {
+                    recDistX = x.p.x();
+                    recDistY = p.y();
+                }
+
+                if (p.x() > x.p.x()) {
+                    nearest(x.rt, p);
+                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                        nearest(x.lb, p);
+                    }
+                }
+                if (p.x() < x.p.x()) {
+                    nearest(x.lb, p);
+                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                        nearest(x.rt, p);
+                    }
+                }
+
+
             }
+
 
         }
 
@@ -264,31 +310,48 @@ public class KdTree {
     {
 /*
         KdTree kd = new KdTree();
-        Point2D p1 = new Point2D(0.2, 0.3);
-        Point2D p2 = new Point2D(0.3, 0.2);
-        Point2D p3 = new Point2D(0.2, 0.1);
-        Point2D p4 = new Point2D(0.4, 0.5);
-        Point2D p5 = new Point2D(0.4, 0.3);
-        Point2D p6 = new Point2D(0.7, 0.7);
+        Point2D p1 = new Point2D(0.0, 0.625);
+        Point2D p2 = new Point2D(0.5, 0.0);
+        Point2D p3 = new Point2D(0.125, 0.25);
+        Point2D p4 = new Point2D(0.375, 0.375);
+        Point2D p5 = new Point2D(0.25, 0.75);
+        //Point2D p6 = new Point2D(0.7, 0.7);
 
         kd.insert(p1);
         kd.insert(p2);
         kd.insert(p3);
         kd.insert(p4);
-        kd.insert(p6);
         kd.insert(p5);
-        System.out.println(kd.root.rt.rt.rt.lb.p);
-        System.out.println(kd.size());
-        kd.insert(p6);
-        System.out.println(kd.size());
-        System.out.println(kd.contains(new Point2D(0.2, 0.9)));
-        kd.draw();
-        RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
-        queryRec.draw();
-        Iterable<Point2D> iter = kd.range(queryRec);
-        System.out.println(iter);
-        System.out.println(kd.nearest(new Point2D(1, 1)));
-        System.out.println(kd.root.rt.rt.p);
+        // kd.insert(p6);
+        // System.out.println(kd.root.rt.rt.rt.lb.p);
+        // System.out.println(kd.size());
+        // System.out.println(kd.size());
+        // System.out.println(kd.contains(new Point2D(0.2, 0.9)));
+        // kd.draw();
+        // RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
+        // queryRec.draw();
+        // Iterable<Point2D> iter = kd.range(queryRec);
+        // System.out.println(iter);
+        // System.out.println(kd.nearest(new Point2D(0.269, 0.222)));
+        // System.out.println(kd.nearest(new Point2D(0.796, 0.571)));
+        // System.out.println(kd.nearest(new Point2D(0.75, 0.5)));
+        // System.out.println(kd.root.lb.rt.p);
 */
+
+        /*
+        KdTree kd = new KdTree();
+        Point2D p1 = new Point2D(0.7, 0.2);
+        Point2D p2 = new Point2D(0.5, 0.4);
+        Point2D p3 = new Point2D(0.2, 0.3);
+        Point2D p4 = new Point2D(0.4, 0.7);
+        Point2D p5 = new Point2D(0.9, 0.6);
+        kd.insert(p1);
+        kd.insert(p2);
+        kd.insert(p3);
+        kd.insert(p4);
+        kd.insert(p5);
+        System.out.println(kd.nearest(new Point2D(0.716, 0.99)));
+
+         */
     }
 }
