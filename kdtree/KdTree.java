@@ -49,7 +49,7 @@ public class KdTree {
     public void insert(Point2D p)              // add the point to the set (if it is not already in the set)
     {
         if (p == null) throw new IllegalArgumentException();
-        if (!contains(p)) root = insert(root, p);
+        root = insert(root, p);
 
 
     }
@@ -71,100 +71,121 @@ public class KdTree {
         // Odd
         if (x.depth % 2 != 0) {
             cmp = Double.compare(key.y(), x.p.y());
-            //Down
+            // Down
             if (cmp < 0) {
                 xMin = x.rect.xmin();
                 yMin = x.rect.ymin();
                 xMax = x.rect.xmax();
                 yMax = x.p.y();
+                x.lb = insert(x.lb, key);
+                x.lb.depth = x.depth + 1;
+                x.lb.rect = new RectHV(xMin, yMin, xMax, yMax);
+                forDraw.enqueue(x.lb);
             }
-            //UP
-            else {
+            // UP
+            else if (cmp > 0) {
                 xMin = x.rect.xmin();
                 yMin = x.p.y();
                 xMax = x.rect.xmax();
                 yMax = x.rect.ymax();
+                x.rt = insert(x.rt, key);
+                x.rt.depth = x.depth + 1;
+                x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
+                forDraw.enqueue(x.rt);
+            } else {
+                if (Double.compare(key.x(), x.p.x()) != 0) {
+                    xMin = x.rect.xmin();
+                    yMin = x.p.y();
+                    xMax = x.rect.xmax();
+                    yMax = x.rect.ymax();
+                    x.rt = insert(x.rt, key);
+                    x.rt.depth = x.depth + 1;
+                    x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
+                    forDraw.enqueue(x.rt);
+
+                }
             }
             // Even
         } else {
             cmp = Double.compare(key.x(), x.p.x());
-            //Left
+            // Left
             if (cmp < 0) {
                 xMin = x.rect.xmin();
                 yMin = x.rect.ymin();
                 xMax = x.p.x();
                 yMax = x.rect.ymax();
+                x.lb = insert(x.lb, key);
+                x.lb.depth = x.depth + 1;
+                x.lb.rect = new RectHV(xMin, yMin, xMax, yMax);
+                forDraw.enqueue(x.lb);
             }
-            //Right
-            else {
+            // Right
+            else if (cmp > 0) {
                 xMin = x.p.x();
                 yMin = x.rect.ymin();
                 xMax = x.rect.xmax();
                 yMax = x.rect.ymax();
+                x.rt = insert(x.rt, key);
+                x.rt.depth = x.depth + 1;
+                x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
+                forDraw.enqueue(x.rt);
+            } else {
+                if (Double.compare(key.y(), x.p.y()) != 0) {
+                    xMin = x.p.x();
+                    yMin = x.rect.ymin();
+                    xMax = x.rect.xmax();
+                    yMax = x.rect.ymax();
+                    x.rt = insert(x.rt, key);
+                    x.rt.depth = x.depth + 1;
+                    x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
+                    forDraw.enqueue(x.rt);
+                }
             }
         }
-        if (cmp < 0) {
-            x.lb = insert(x.lb, key);
-            x.lb.depth = x.depth + 1;
-            x.lb.rect = new RectHV(xMin, yMin, xMax, yMax);
-            forDraw.enqueue(x.lb);
-        } else {
-            x.rt = insert(x.rt, key);
-            x.rt.depth = x.depth + 1;
-            x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
-            forDraw.enqueue(x.rt);
-        }
         x.size = 1 + size(x.lb) + size(x.rt);
-
         return x;
-
-
     }
+
 
     public boolean contains(Point2D p)            // does the set contain point p?
     {
         if (p == null) throw new IllegalArgumentException();
-        return get(p) != null;
+        return get(root, p) != null;
     }
 
-    private Point2D get(Point2D p) {
+
+    private Point2D get(Node x, Point2D p) {
         if (p == null) throw new IllegalArgumentException();
-        Node x = root;
-        while (x != null) {
+        if (x == null) return null;
+        int cmp;
+        // ODD
+        if (x.depth % 2 != 0) {
+            cmp = Double.compare(p.y(), x.p.y());
+            if (cmp < 0) return get(x.lb, p);
+            else if (cmp > 0) return get(x.rt, p);
+            else {
+                if (Double.compare(p.x(), x.p.x()) == 0) {
 
-            //System.out.println("RIGHT CHILD:" + x.rt.p);
-            int cmp;
-            if (x.depth % 2 != 0) {
-                cmp = Double.compare(p.y(), x.p.y());
-                if (cmp < 0) x = x.lb;
-                else if (cmp > 0) x = x.rt;
-                else {
-                    if (Double.compare(p.x(), x.p.x()) == 0) {
-
-                        return x.p;
-                    } else x = x.lb;
+                    return x.p;
+                } else return get(x.rt, p);
 
 
-                }
-            } else {
-                cmp = Double.compare(p.x(), x.p.x());
-
-                if (cmp < 0) x = x.lb;
-                else if (cmp > 0) x = x.rt;
-                else {
-                    if (Double.compare(p.y(), x.p.y()) == 0) {
-
-                        return x.p;
-
-                    } else x = x.rt;
-
-
-                }
             }
+            // EVEN
+        } else {
+            cmp = Double.compare(p.x(), x.p.x());
+            if (cmp < 0) return get(x.lb, p);
+            else if (cmp > 0) return get(x.rt, p);
+            else {
+                if (Double.compare(p.y(), x.p.y()) == 0) {
+
+                    return x.p;
+
+                } else return get(x.rt, p);
 
 
+            }
         }
-        return null;
 
 
     }
@@ -241,29 +262,33 @@ public class KdTree {
 
     public static void main(String[] args)                  // unit testing of the methods (optional)
     {
-
+/*
         KdTree kd = new KdTree();
         Point2D p1 = new Point2D(0.2, 0.3);
         Point2D p2 = new Point2D(0.3, 0.2);
         Point2D p3 = new Point2D(0.2, 0.1);
         Point2D p4 = new Point2D(0.4, 0.5);
-        Point2D p5 = new Point2D(0.7, 0.7);
+        Point2D p5 = new Point2D(0.4, 0.3);
         Point2D p6 = new Point2D(0.7, 0.7);
 
         kd.insert(p1);
         kd.insert(p2);
         kd.insert(p3);
         kd.insert(p4);
-        kd.insert(p5);
         kd.insert(p6);
-
-        //kd.draw();
-        //RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
-        //queryRec.draw();
-        //Iterable<Point2D> iter = kd.range(queryRec);
-        //System.out.println(iter);
-        //System.out.println(kd.nearest(new Point2D(0.2, 0.2)));
-        //System.out.println(kd.root.rt.rt.p);
+        kd.insert(p5);
+        System.out.println(kd.root.rt.rt.rt.lb.p);
         System.out.println(kd.size());
+        kd.insert(p6);
+        System.out.println(kd.size());
+        System.out.println(kd.contains(new Point2D(0.2, 0.9)));
+        kd.draw();
+        RectHV queryRec = new RectHV(0.3, 0.3, 0.7, 0.7);
+        queryRec.draw();
+        Iterable<Point2D> iter = kd.range(queryRec);
+        System.out.println(iter);
+        System.out.println(kd.nearest(new Point2D(1, 1)));
+        System.out.println(kd.root.rt.rt.p);
+*/
     }
 }

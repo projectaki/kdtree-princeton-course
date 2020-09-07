@@ -71,6 +71,7 @@ public class PointSET {
 
     public static void main(String[] args)                  // unit testing of the methods (optional)
     {
+        /*
         Point2D p = new Point2D(0.5, 0.5);
         Point2D p1 = new Point2D(0.1, 0.5);
         Point2D p2 = new Point2D(0.3, 0.5);
@@ -78,20 +79,22 @@ public class PointSET {
         pS.insert(p);
         pS.insert(p1);
         pS.insert(p2);
-        /*
+
         for (Point2D po : pS.set) {
             System.out.println(po);
         }
 
+
+        pS.draw();
+        RectHV rec = new RectHV(0.2, 0.3, 0.7, 0.7);
+        rec.draw();
+
+        Iterable<Point2D> temp = pS.range(rec);
+        System.out.println(temp);
+
+        System.out.println(pS.nearest(new Point2D(0, 0)));
+
+
          */
-        //pS.draw();
-        //RectHV rec = new RectHV(0.2, 0.3, 0.7, 0.7);
-        //rec.draw();
-
-        // Iterable<Point2D> temp = pS.range(rec);
-        //System.out.println(temp);
-
-        //System.out.println(pS.nearest(new Point2D(0, 0)));
-
     }
 }
