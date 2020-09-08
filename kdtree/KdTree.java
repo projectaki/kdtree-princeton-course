@@ -237,40 +237,37 @@ public class KdTree {
             if (x.depth == 0) {
                 champion = root.p;
             }
-            double recDistX;
-            double recDistY;
+
             if (p.distanceSquaredTo(x.p) < p.distanceSquaredTo(champion)) {
                 champion = x.p;
             }
             // ODD
             if (x.depth % 2 != 0) {
-                recDistX = p.x();
-                recDistY = x.p.y();
+
 
                 if (p.y() >= x.p.y()) {
                     nearest(x.rt, p);
-                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                    if (x.lb != null && x.lb.rect.distanceSquaredTo(p) < p.distanceSquaredTo(champion)) {
                         nearest(x.lb, p);
                     }
                 } else {
                     nearest(x.lb, p);
-                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                    if (x.rt != null && x.rt.rect.distanceSquaredTo(p) < p.distanceSquaredTo(champion)) {
                         nearest(x.rt, p);
                     }
                 }
 
                 // EVEN
             } else {
-                recDistX = x.p.x();
-                recDistY = p.y();
+
                 if (p.x() >= x.p.x()) {
                     nearest(x.rt, p);
-                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                    if (x.lb != null && x.lb.rect.distanceSquaredTo(p) < p.distanceSquaredTo(champion)) {
                         nearest(x.lb, p);
                     }
                 } else {
                     nearest(x.lb, p);
-                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                    if (x.rt != null && x.rt.rect.distanceSquaredTo(p) < p.distanceSquaredTo(champion)) {
                         nearest(x.rt, p);
                     }
                 }
@@ -315,7 +312,7 @@ public class KdTree {
         // System.out.println(kd.root.lb.rt.p);
 
 */
-
+/*
         KdTree kd = new KdTree();
         Point2D p1 = new Point2D(0.7, 0.2);
         Point2D p2 = new Point2D(0.5, 0.4);
@@ -330,5 +327,7 @@ public class KdTree {
         System.out.println(kd.nearest(new Point2D(0.67, 0.18)));
 
 
+
+ */
     }
 }

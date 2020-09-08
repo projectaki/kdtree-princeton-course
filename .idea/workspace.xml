@@ -93,38 +93,38 @@
     </configuration>
   </component>
   <component name="WindowStateProjectService">
-    <state width="803" height="257" key="GridCell.Tab.0.bottom" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.0.bottom" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.0.center" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.0.center" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.0.left" timestamp="1599547888747">
+    <state width="800" height="257" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.0.left" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1599547888747" />
-    <state width="803" height="257" key="GridCell.Tab.0.right" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.0.right" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.1.bottom" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.1.bottom" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.1.center" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.1.center" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.1.left" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.1.left" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
-    <state width="803" height="257" key="GridCell.Tab.1.right" timestamp="1599547888748">
+    <state width="800" height="257" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
+    <state width="800" height="257" key="GridCell.Tab.1.right" timestamp="1599548864743">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="803" height="257" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1599547888748" />
+    <state width="800" height="257" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1599548864743" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -135,7 +135,7 @@
           <properties class="KdTree" method="nearest">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
