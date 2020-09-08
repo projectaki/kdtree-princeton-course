@@ -1,16 +1,18 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
     private Node root;
-    private final Queue<Node> forDraw;
     private Point2D champion;
+    private double xMin;
+    private double yMin;
+    private double xMax;
+    private double yMax;
 
     private static class Node {
-        private Point2D p;      // the point
-        private RectHV rect;    // the axis-aligned rectangle corresponding to this node
+        private final Point2D p;      // the point
+        private final RectHV rect;    // the axis-aligned rectangle corresponding to this node
         private Node lb;        // the left/bottom subtree
         private Node rt;        // the right/top subtree
         private int size;
@@ -26,8 +28,10 @@ public class KdTree {
 
     public KdTree()                               // construct an empty set of points
     {
-        forDraw = new Queue<>();
-
+        xMin = 0;
+        yMin = 0;
+        xMax = 1;
+        yMax = 1;
     }
 
     public boolean isEmpty()                      // is the set empty?
@@ -54,17 +58,10 @@ public class KdTree {
     }
 
     private Node insert(Node x, Point2D key) {
-        // x = previous
-        if (x == null) {
-            Node temp = new Node(key, 1, 0, new RectHV(0, 0, 10, 10));
-            forDraw.enqueue(temp);
-            return temp;
-        }
 
-        double xMin;
-        double yMin;
-        double xMax;
-        double yMax;
+        if (x == null) {
+            return new Node(key, 1, 0, new RectHV(xMin, yMin, xMax, yMax));
+        }
 
         int cmp;
         // Odd
@@ -78,8 +75,8 @@ public class KdTree {
                 yMax = x.p.y();
                 x.lb = insert(x.lb, key);
                 x.lb.depth = x.depth + 1;
-                x.lb.rect = new RectHV(xMin, yMin, xMax, yMax);
-                forDraw.enqueue(x.lb);
+
+
             }
             // UP
             else if (cmp > 0) {
@@ -89,8 +86,8 @@ public class KdTree {
                 yMax = x.rect.ymax();
                 x.rt = insert(x.rt, key);
                 x.rt.depth = x.depth + 1;
-                x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
-                forDraw.enqueue(x.rt);
+
+
             } else {
                 if (Double.compare(key.x(), x.p.x()) != 0) {
                     xMin = x.rect.xmin();
@@ -99,8 +96,7 @@ public class KdTree {
                     yMax = x.rect.ymax();
                     x.rt = insert(x.rt, key);
                     x.rt.depth = x.depth + 1;
-                    x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
-                    forDraw.enqueue(x.rt);
+
 
                 }
             }
@@ -115,8 +111,8 @@ public class KdTree {
                 yMax = x.rect.ymax();
                 x.lb = insert(x.lb, key);
                 x.lb.depth = x.depth + 1;
-                x.lb.rect = new RectHV(xMin, yMin, xMax, yMax);
-                forDraw.enqueue(x.lb);
+
+
             }
             // Right
             else if (cmp > 0) {
@@ -126,8 +122,8 @@ public class KdTree {
                 yMax = x.rect.ymax();
                 x.rt = insert(x.rt, key);
                 x.rt.depth = x.depth + 1;
-                x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
-                forDraw.enqueue(x.rt);
+
+
             } else {
                 if (Double.compare(key.y(), x.p.y()) != 0) {
                     xMin = x.p.x();
@@ -136,8 +132,8 @@ public class KdTree {
                     yMax = x.rect.ymax();
                     x.rt = insert(x.rt, key);
                     x.rt.depth = x.depth + 1;
-                    x.rt.rect = new RectHV(xMin, yMin, xMax, yMax);
-                    forDraw.enqueue(x.rt);
+
+
                 }
             }
         }
@@ -192,14 +188,7 @@ public class KdTree {
 
     public void draw()                         // draw all points to standard draw
     {
-        StdDraw.setPenRadius(0.01);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.square(0.5, 0.5, 0.5);
-        for (Node n : forDraw) {
-            n.p.draw();
-            n.rect.draw();
 
-        }
     }
 
     public Iterable<Point2D> range(RectHV rect)    // all points that are inside the rectangle (or on the boundary)
@@ -319,10 +308,7 @@ public class KdTree {
         kd.insert(p3);
         kd.insert(p4);
         kd.insert(p5);
-        // System.out.println(kd.nearest(new Point2D(0.67, 0.18)));
-        RectHV queryRec = new RectHV(0.3, 0.3, 0.6, 0.8);
-        Iterable<Point2D> iter = kd.range(queryRec);
-        System.out.println(iter);
+        System.out.println(kd.root.lb.lb.rect);
 */
 
     }
