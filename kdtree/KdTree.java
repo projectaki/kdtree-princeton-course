@@ -6,7 +6,6 @@ import edu.princeton.cs.algs4.StdDraw;
 public class KdTree {
     private Node root;
     private final Queue<Node> forDraw;
-    private final Queue<Point2D> insideRect = new Queue<>();
     private Point2D champion;
 
     private static class Node {
@@ -206,23 +205,19 @@ public class KdTree {
     public Iterable<Point2D> range(RectHV rect)    // all points that are inside the rectangle (or on the boundary)
     {
         if (rect == null) throw new IllegalArgumentException();
-
-        range(root, rect);
+        Queue<Point2D> insideRect = new Queue<>();
+        range(root, rect, insideRect);
         return insideRect;
     }
 
-    private void range(Node x, RectHV rect) {
+    private void range(Node x, RectHV rect, Queue<Point2D> q) {
+
         if (x != null) {
-            if (rect.contains(x.p)) insideRect.enqueue(x.p);
-            if (x.lb != null) {
-                if (rect.intersects(x.lb.rect)) range(x.lb, rect);
-            }
-            if (x.rt != null) {
-                if (rect.intersects(x.rt.rect)) range(x.rt, rect);
-            }
+            if (rect.contains(x.p)) q.enqueue(x.p);
+            if (x.lb != null && rect.intersects(x.lb.rect)) range(x.lb, rect, q);
+            if (x.rt != null && rect.intersects(x.rt.rect)) range(x.rt, rect, q);
+
         }
-
-
     }
 
     public Point2D nearest(Point2D p)             // a nearest neighbor in the set to point p; null if the set is empty
@@ -324,10 +319,11 @@ public class KdTree {
         kd.insert(p3);
         kd.insert(p4);
         kd.insert(p5);
-        System.out.println(kd.nearest(new Point2D(0.67, 0.18)));
+        // System.out.println(kd.nearest(new Point2D(0.67, 0.18)));
+        RectHV queryRec = new RectHV(0.3, 0.3, 0.6, 0.8);
+        Iterable<Point2D> iter = kd.range(queryRec);
+        System.out.println(iter);
+*/
 
-
-
- */
     }
 }
