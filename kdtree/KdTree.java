@@ -242,67 +242,44 @@ public class KdTree {
             if (p.distanceSquaredTo(x.p) < p.distanceSquaredTo(champion)) {
                 champion = x.p;
             }
-            if (x.lb != null && x.lb.rect.contains(p)) {
+            // ODD
+            if (x.depth % 2 != 0) {
+                recDistX = p.x();
+                recDistY = x.p.y();
 
-                if (x.depth % 2 != 0) {
-                    recDistX = p.x();
-                    recDistY = x.p.y();
-                } else {
-                    recDistX = x.p.x();
-                    recDistY = p.y();
-
-                }
-
-
-                nearest(x.lb, p);
-
-                if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
-                    nearest(x.rt, p);
-                }
-
-            } else if (x.rt != null && x.rt.rect.contains(p)) {
-
-                if (x.depth % 2 != 0) {
-                    recDistX = p.x();
-                    recDistY = x.p.y();
-                } else {
-                    recDistX = x.p.x();
-                    recDistY = p.y();
-                }
-
-                nearest(x.rt, p);
-                if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
-                    nearest(x.lb, p);
-                }
-
-
-            } else {
-                if (x.depth % 2 != 0) {
-                    recDistX = p.x();
-                    recDistY = x.p.y();
-                } else {
-                    recDistX = x.p.x();
-                    recDistY = p.y();
-                }
-
-                if (p.x() > x.p.x()) {
+                if (p.y() >= x.p.y()) {
                     nearest(x.rt, p);
                     if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
                         nearest(x.lb, p);
                     }
-                }
-                if (p.x() < x.p.x()) {
+                } else {
                     nearest(x.lb, p);
                     if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
                         nearest(x.rt, p);
                     }
                 }
 
+                // EVEN
+            } else {
+                recDistX = x.p.x();
+                recDistY = p.y();
+                if (p.x() >= x.p.x()) {
+                    nearest(x.rt, p);
+                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                        nearest(x.lb, p);
+                    }
+                } else {
+                    nearest(x.lb, p);
+                    if (p.distanceSquaredTo(new Point2D(recDistX, recDistY)) < p.distanceSquaredTo(champion)) {
+                        nearest(x.rt, p);
+                    }
+                }
 
             }
 
 
         }
+
 
     }
 
@@ -336,9 +313,9 @@ public class KdTree {
         // System.out.println(kd.nearest(new Point2D(0.796, 0.571)));
         // System.out.println(kd.nearest(new Point2D(0.75, 0.5)));
         // System.out.println(kd.root.lb.rt.p);
+
 */
 
-        /*
         KdTree kd = new KdTree();
         Point2D p1 = new Point2D(0.7, 0.2);
         Point2D p2 = new Point2D(0.5, 0.4);
@@ -350,8 +327,8 @@ public class KdTree {
         kd.insert(p3);
         kd.insert(p4);
         kd.insert(p5);
-        System.out.println(kd.nearest(new Point2D(0.716, 0.99)));
+        System.out.println(kd.nearest(new Point2D(0.67, 0.18)));
 
-         */
+
     }
 }
